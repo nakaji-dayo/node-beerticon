@@ -4,18 +4,19 @@ var xamel = require('xamel');
 var gm = require('gm');
 
 var Beerticon = function(settings) {
-    if (settings) {
-	this.settings = settings;
-    } else {
-	this.settings = {
-	    sourceSvg: ['data/bottle_heart.svg', 'data/bottle_star.svg'],
-	    colors: [],
-	    size: {width:128, height:128},
-	    hashForReplace: function(str, org) {
-		return Beerticon.hashString(str) * Beerticon.hashString(org);
-	    }
-	};
-    }    
+    this.settings = settings ? settings : {};
+    var defaultSettings = {
+	sourceSvg: ['data/bottle_heart.svg', 'data/bottle_star.svg'],
+	size: {width:128, height:128},
+	hashForReplace: function(str, org) {
+	    return Beerticon.hashString(str) * Beerticon.hashString(org);
+	}
+    };
+    for (k in defaultSettings) {
+	if (!this.settings[k]) {
+	    this.settings[k] = defaultSettings[k];
+	}
+    }
 };
 
 Beerticon.prototype.generate = function(str, outputFile, cb) {
@@ -23,7 +24,6 @@ Beerticon.prototype.generate = function(str, outputFile, cb) {
     if (Array.isArray(this.settings.sourceSvg)) {
 	var elem = getIdenticonElem(Beerticon.hashString(str));	
 	var index = Math.abs(elem.code%this.settings.sourceSvg.length);
-	console.log(index, elem.reminder, elem.code);
 	src = this.settings.sourceSvg[index];
     } else {
 	src = this.settings.sourceSvg;
@@ -38,7 +38,6 @@ Beerticon.prototype.generate = function(str, outputFile, cb) {
 		var elem = getIdenticonElem(this.settings.hashForReplace(str, org));
 		return 'rgb(' + elem.red + ',' + elem.green + ',' + elem.blue + ')';		
 	    }.bind(this));
-	    //TODO: stream xml builderを探す
 	    var xml = xamel.serialize(colorReplacedSvg);
 	    gm(new Buffer(xml), '.tmp.svg')
 		.resize(this.settings.size.width, this.settings.size.height)
