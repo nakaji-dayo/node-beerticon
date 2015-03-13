@@ -1,6 +1,6 @@
 {
-    "name": "node-beerticon",
-    "version": "0.0.1",
+    "name": "beerticon",
+    "version": "0.0.2",
     "description": "Generate Beer Identicon",
     "main": "index.js",
     "scripts": {
@@ -13,7 +13,8 @@
     },
     "keywords": [
 	"beer",
-	"identicon"
+	"identicon",
+	"icon"
     ],
     "author": "Daishi Nakajima",
     "license": "MIT",

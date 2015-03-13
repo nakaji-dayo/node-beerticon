@@ -6,10 +6,10 @@ var gm = require('gm');
 var Beerticon = function(settings) {
     this.settings = settings ? settings : {};
     var defaultSettings = {
-	sourceSvg: ['data/bottle_heart.svg', 'data/bottle_star.svg'],
+	sourceSvg: [__dirname + '/data/bottle_heart.svg', __dirname + '/data/bottle_star.svg'],
 	size: {width:128, height:128},
 	hashForReplace: function(str, org) {
-	    return Beerticon.hashString(str) * Beerticon.hashString(org);
+	    return Beerticon.hashString(str) * Beerticon.hashString(org + str);
 	}
     };
     for (k in defaultSettings) {
@@ -19,7 +19,30 @@ var Beerticon = function(settings) {
     }
 };
 
-Beerticon.prototype.generate = function(str, outputFile, cb) {
+Beerticon.prototype.generate = function(str, cb) {
+    this.generateGM(str, function(err, gmc) {
+	if (err) {
+	    cb(err);
+	    return;
+	}
+	gmc.toBuffer('PNG', function(err, buffer) {
+	    cb(err, buffer);
+	});
+    });
+};
+
+Beerticon.prototype.generateFile = function(str, outputFile, cb) {
+    this.generateGM(str, function(err, gmc) {
+	if (err) {
+	    cb(err);
+	    return;
+	}
+	gmc.write(outputFile, function(err) {
+	    cb(err);
+	});
+    });
+};
+Beerticon.prototype.generateGM = function(str, cb) {
     var src;
     if (Array.isArray(this.settings.sourceSvg)) {
 	var elem = getIdenticonElem(Beerticon.hashString(str));	
@@ -39,12 +62,10 @@ Beerticon.prototype.generate = function(str, outputFile, cb) {
 		return 'rgb(' + elem.red + ',' + elem.green + ',' + elem.blue + ')';		
 	    }.bind(this));
 	    var xml = xamel.serialize(colorReplacedSvg);
-	    gm(new Buffer(xml), '.tmp.svg')
-		.resize(this.settings.size.width, this.settings.size.height)
-		.density(this.settings.size.width*4, this.settings.size.height*4)
-		.write(outputFile, function(err) {
-		    cb(err);
-		});
+	    var gmc = gm(new Buffer(xml), '.tmp.svg')
+		    .resize(this.settings.size.width, this.settings.size.height)
+		    .density(this.settings.size.width*4, this.settings.size.height*4);
+	    cb(null, gmc);
 	}.bind(this));
     }.bind(this));
 };

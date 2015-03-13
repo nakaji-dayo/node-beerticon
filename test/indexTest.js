@@ -32,7 +32,7 @@ describe('Beerticon', function() {
 	   arr.push('yamata-kun');
 	   
 	   async.each(arr, function(i, cb) {
-	       (new Beerticon()).generate('i='+i, 'tmp/' + i + '.png' , cb);
+	       (new Beerticon()).generateFile('i='+i, 'tmp/' + i + '.png' , cb);
 	   }, function(err) {
 	       if (err) throw err;
 	       var cs = [];
@@ -57,7 +57,7 @@ describe('Beerticon', function() {
 	(new Beerticon({
 	    sourceSvg: './test/test.svg',
 	    size: {width: 32, height: 32}
-	})).generate('setting test', './tmp/test.png' , function(err) {
+	})).generateFile('setting test', './tmp/test.png' , function(err) {
 	    if (err) throw err;
 	    gm('./tmp/test.png').size(function(err, size) {
 		size.width.should.be.equal(32);
@@ -65,5 +65,17 @@ describe('Beerticon', function() {
 		done();
 	    });
 	});	
+    });
+    it ('size 512, buffer', function(done) {
+	(new Beerticon({
+	    size: {width: 512, height: 512}
+	})).generate('size test', function(err, buffer) {
+	    gm(buffer, 'test.png').size(function(err, size) {
+		if (err) throw err;
+		size.width.should.be.equal(512);
+		size.height.should.be.equal(512);
+		done();
+	    });
+	});
     });
 });
