@@ -8,6 +8,9 @@ From SVG files
 To colored icons
 ![2015-03-28 16 41 47](https://cloud.githubusercontent.com/assets/1113464/6880207/87201136-d569-11e4-9364-c043588a0f85.png)
 
+The color pattern is determined by the hash of a string(e.g. user_id).  
+It can make a unique icon for each user.(However, unlike Identicon, it is easy to collision)
+
 ## install
 ```npm install beerticon```
 
@@ -34,13 +37,14 @@ new Beerticon({
 })
 ```
 #### Settings
+
 | name | description | example |
-| -- | -- | -- |
+|----|----|----|
 | sourceSvg | input svg file path(s) ([String] or String) | './path/to/input.svg' |
 | size | output image size | {width:128, height:128} |
 | replace | function to replace color. It returns Beerticon.Hash or Beerticon.Color data type. | function(str, org){return new Beerticon.Hash(myHash(str));} |
 
-#### Sample for fixing a specific color
+#### Sample for fixing a specific color (background is always white)
 ```
 new Beerticon({
     replace: function(str, org){
