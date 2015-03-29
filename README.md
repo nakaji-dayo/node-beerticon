@@ -9,7 +9,7 @@ To colored icons
 ![2015-03-28 16 41 47](https://cloud.githubusercontent.com/assets/1113464/6880207/87201136-d569-11e4-9364-c043588a0f85.png)
 
 The color pattern is determined by the hash of a string(e.g. user_id).  
-It can make a unique icon for each user.(However, unlike Identicon, it is easy to collision)
+It can make a unique icon for each user.(However, unlike Identicon, it is easy to collision depending on the svg)
 
 ## install
 ```npm install beerticon```
