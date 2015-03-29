@@ -3,7 +3,7 @@
 Generate color variation icon from svg.
 
 From SVG files  
-```[bottle_heart.svg, bottle_star.svg]```
+```[bottle_heart.svg, bottle_star.svg]```　And identity string
 
 To colored icons
 ![2015-03-28 16 41 47](https://cloud.githubusercontent.com/assets/1113464/6880207/87201136-d569-11e4-9364-c043588a0f85.png)
@@ -40,7 +40,7 @@ new Beerticon({
 
 | name | description | example |
 |----|----|----|
-| sourceSvg | input svg file path(s) ([String] or String) | './path/to/input.svg' |
+| sourceSvg | input svg file path(s) ([String] or String) | ['./path/to/input.svg', './second.svg'] |
 | size | output image size | {width:128, height:128} |
 | replace | function to replace color. It returns Beerticon.Hash or Beerticon.Color data type. | function(str, org){return new Beerticon.Hash(myHash(str));} |
 
